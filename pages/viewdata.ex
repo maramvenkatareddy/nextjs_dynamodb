@@ -9,7 +9,7 @@ const ViewData = () => {
   const [items, setItems] = useState([]);
   const router = useRouter();
 
-  // ✅ Fetch all data
+  // ✅ Fetch all items from DynamoDB
   const fetchData = async () => {
     try {
       const result = await ddbDocClient.send(
@@ -26,20 +26,21 @@ const ViewData = () => {
     fetchData();
   }, []);
 
-  // ✅ Navigate to add data page
-  const handleAddNew = () => {
-    router.push("/adddata"); // change to / if your form is on the home page
-  };
-
-  // ✅ Edit data
+  // ✅ Navigate to update page
   const handleUpdate = (item) => {
     router.push({
       pathname: "/updatedata",
-      query: item,
+      query: {
+        LockID: item.LockID,
+        firstName: item.firstName,
+        lastName: item.lastName,
+        city: item.city,
+        phoneNumber: item.phoneNumber,
+      },
     });
   };
 
-  // ✅ Delete data
+  // ✅ Delete an item from DynamoDB
   const handleDelete = async (lockId) => {
     if (!confirm("Are you sure you want to delete this record?")) return;
 
@@ -47,7 +48,7 @@ const ViewData = () => {
       await ddbDocClient.send(
         new DeleteCommand({
           TableName: NEXT_PUBLIC_DYNAMO_TABLE_NAME,
-          Key: { LockID: String(lockId) },
+          Key: { LockID: String(lockId) }, // LockID must match the key type
         })
       );
       alert("✅ Record deleted successfully!");
@@ -60,15 +61,7 @@ const ViewData = () => {
 
   return (
     <div className="flex flex-col items-center justify-center p-10 bg-gray-50 min-h-screen">
-      <div className="flex justify-between items-center w-3/4 mb-6">
-        <p className="text-3xl font-semibold text-gray-800">View Data</p>
-        <button
-          onClick={handleAddNew}
-          className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
-        >
-          ➕ Add New Record
-        </button>
-      </div>
+      <p className="text-3xl mb-8 font-semibold text-gray-800">View Data</p>
 
       <table className="table-auto border-collapse border border-gray-300 w-3/4 text-center">
         <thead className="bg-blue-100">
