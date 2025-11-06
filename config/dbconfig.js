@@ -2,7 +2,7 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 
 // Set the AWS Region.
-const REGION = process.env.AWS_REGION || "ap-south-1";
+const REGION = process.env.Region || "ap-south-1";
 // Create an Amazon DynamoDB service client object.
 
 const ddbClient = new DynamoDBClient({
