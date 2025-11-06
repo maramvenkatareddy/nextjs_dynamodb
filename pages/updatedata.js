@@ -11,21 +11,21 @@ const styles = {
 
 const UpdateData = () => {
   const router = useRouter();
-  const data = router.query; // contains LockID and other fields passed from viewdata.js
+  const data = router.query; // contains id and other fields passed from viewdata.js
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // Ensure LockID exists
-    if (!data.LockID) {
-      alert("Missing LockID — cannot update record!");
+    // Ensure id exists
+    if (!data.id) {
+      alert("Missing id — cannot update record!");
       return;
     }
 
     const params = {
       TableName: NEXT_PUBLIC_DYNAMO_TABLE_NAME,
       Key: {
-        LockID: String(data.LockID), // ✅ Correct primary key name & type
+        id: data.id, // ✅ Correct primary key name & type
       },
       UpdateExpression:
         "set firstName = :p, lastName = :r, city = :q, phoneNumber = :z, dateModified = :k",
