@@ -40,18 +40,18 @@ const ViewData = () => {
   };
 
   // ✅ Delete data
-  const handleDelete = async (lockId) => {
+  const handleDelete = async (id) => {
     if (!confirm("Are you sure you want to delete this record?")) return;
 
     try {
       await ddbDocClient.send(
         new DeleteCommand({
           TableName: NEXT_PUBLIC_DYNAMO_TABLE_NAME,
-          Key: { LockID: String(lockId) },
+          Key: { id: id },
         })
       );
       alert("✅ Record deleted successfully!");
-      setItems(items.filter((i) => i.LockID !== lockId));
+      setItems(items.filter((i) => i.id !== id));
     } catch (err) {
       console.error("❌ Error deleting record:", err);
       alert("Failed to delete record. Check console for details.");
@@ -73,7 +73,7 @@ const ViewData = () => {
       <table className="table-auto border-collapse border border-gray-300 w-3/4 text-center">
         <thead className="bg-blue-100">
           <tr>
-            <th className="border border-gray-300 px-4 py-2">LockID</th>
+            <th className="border border-gray-300 px-4 py-2">id</th>
             <th className="border border-gray-300 px-4 py-2">First Name</th>
             <th className="border border-gray-300 px-4 py-2">Last Name</th>
             <th className="border border-gray-300 px-4 py-2">City</th>
@@ -84,8 +84,8 @@ const ViewData = () => {
         <tbody>
           {items.length > 0 ? (
             items.map((item) => (
-              <tr key={item.LockID}>
-                <td className="border border-gray-300 px-4 py-2">{item.LockID}</td>
+              <tr key={item.id}>
+                <td className="border border-gray-300 px-4 py-2">{item.id}</td>
                 <td className="border border-gray-300 px-4 py-2">{item.firstName}</td>
                 <td className="border border-gray-300 px-4 py-2">{item.lastName}</td>
                 <td className="border border-gray-300 px-4 py-2">{item.city}</td>
@@ -98,7 +98,7 @@ const ViewData = () => {
                     Edit
                   </button>
                   <button
-                    onClick={() => handleDelete(item.LockID)}
+                    onClick={() => handleDelete(item.id)}
                     className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
                   >
                     Delete
