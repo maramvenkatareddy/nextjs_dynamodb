@@ -28,7 +28,7 @@ const AddData = () => {
     const params = {
       TableName: NEXT_PUBLIC_DYNAMO_TABLE_NAME,
       Item: {
-        LockID: String(Math.floor(Math.random() * 1000000)),
+        id: Math.floor(Math.random() * 1000000),
         dateAdded: new Date().toISOString(),
         dateModified: "",
         firstName,
